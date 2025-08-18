@@ -10,6 +10,27 @@ This includes:
 - ✅ Argo CD setup and deployment  
 - ✅ Testing the app  
 
+## ⚙️ How It Works
+
+1. **Kubernetes Cluster**  
+   A running Kubernetes cluster must be deployed before starting.
+
+2. **GitOps with Argo CD**  
+   Argo CD continuously watches your GitHub repository for changes to Kubernetes manifests and syncs them automatically.
+
+3. **Kustomize Structure**  
+   Manifests like Deployment, Service, and ConfigMap are managed using Kustomize’s modular file structure.
+
+4. **ConfigMap Injection**  
+   A custom `index.html` file is stored inside a ConfigMap and mounted into the NGINX pod at runtime.
+
+5. **Automated Deployment**  
+   Argo CD applies the manifests, deploys the NGINX pod, mounts the ConfigMap, and exposes the service using NodePort.
+
+6. **Live App Access**  
+   The NGINX app becomes accessible at `http://<NodeIP>:<NodePort>`, displaying the custom HTML page.
+
+
 ---
 
 ## 🧱 1. Components
