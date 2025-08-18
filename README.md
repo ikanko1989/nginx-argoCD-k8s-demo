@@ -1,2 +1,135 @@
-# nginx-argoCD-k8s-demo
-nginx-argoCD-k8s-demo
+#  Project: `nginx-argoCD-k8s-demo`
+
+## 🎯 Objectives
+
+Deploying an **NGINX web server** with custom HTML via a ConfigMap, using **Kustomize** and **Argo CD** on a Kubernetes cluster.
+
+This includes:
+- ✅ Full GitHub-based GitOps flow  
+- ✅ Kustomize folder structure and usage  
+- ✅ Argo CD setup and deployment  
+- ✅ Testing the app  
+
+---
+
+## 🧱 1. Components
+
+| Component         | Description                                                  |
+|------------------|--------------------------------------------------------------|
+| NGINX Deployment | A simple NGINX pod serving static HTML content               |
+| ConfigMap        | Contains a custom `index.html` file                          |
+| Kustomize        | Manages the deployment using modular YAML files              |
+| Argo CD          | Watches a GitHub repo and syncs the manifests automatically  |
+| GitHub           | Stores your Kustomize-based Kubernetes manifests             |
+
+---
+
+## 📁 2. Directory & File Structure  
+nginx-argo-k8s-demo/  
+└── nginx-app/  
+├── deployment.yaml  
+├── service.yaml  
+├── configmap.yaml  
+└── kustomization.yaml  
+
+## 📄 3. Manifest Files
+
+### `deployment.yaml`
+### `service.yaml`
+### `configmap.yaml`
+### `kustomization.yaml`
+
+## 🚀 4. Push Code to GitHub  
+git init  
+git remote add origin https://github.com/ikanko1989/nginx-argo-k8s-demo.git  
+git add .  
+git commit -m "Initial commit: NGINX with Kustomize and argoCD"  
+git push -u origin master  
+
+## ☸️ 5. Use Kubernetes for Argo CD Deployment  
+
+**a. Create Argo CD namespace:**  
+student-node ~ ➜  kubectl create ns argocd  
+
+**b. Install Argo CD:**    
+student-node ~ ➜  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml  
+
+## 🌐 6. Access Argo CD
+**a. Port-forward Argo CD server:**  
+“Wiith this we are forwarding my local machine’s port 8080 to the Argo CD service's port 80 inside the cluster.”   
+student-node ~ ➜  kubectl port-forward svc/argocd-server -n argocd 8080:80  
+student-node ~ ➜  curl -k http://localhost:8080  
+ 
+**b. Get the initial password:** 
+(needed in case we want use UI)  
+
+student-node ~ ✖ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  
+BJxI5r4EAhazT--l  
+
+
+## 🔁 7. Create Argo CD Application
+
+You can create the Argo CD app using a declarative YAML file or using UI.
+I have used YAML:  
+
+**nginx-app-argocd.yaml**
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ikanko1989/nginx-argo-k8s-demo
+    targetRevision: HEAD
+    path: nginx-argo-k8s-demo/nginx-app
+    kustomize: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+
+
+**Apply the Argo CD Application:**
+
+student-node ~ ➜  kubectl apply -f nginx-app-argocd.yaml   
+application.argoproj.io/nginx-app created  
+
+## ✅ 8. Confirm Deployment
+
+Check if everything is running:  
+
+student-node ~ ➜  kubectl get pods -o wide  
+NAME                                READY   STATUS    RESTARTS   AGE   IP          NODE              NOMINATED NODE   READINESS GATES  
+nginx-deployment-5f9f5cfd55-llbtp   1/1     Running   0          11m   10.42.1.6   cluster1-node01   <none>           <none>  
+
+kubectl get svc
+
+
+Look for nginx-service and its NodePort.
+
+## 🌍 9. Access the NGINX App
+
+**Get the NodePort:**
+
+kubectl get svc nginx-service
+
+
+**Access the app via:**
+
+student-node ~ ➜  curl http://192.168.102.149:32387
+<html>
+  <head><title>Welcome to Argo CD + NGINX</title></head>
+  <body>
+    <h1>Hello from ConfigMap!</h1>
+  </body>
+</html>
+
+
+**Or open in your browser:**
+
+http://<NODE-IP>:<NODEPORT>
