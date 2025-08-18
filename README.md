@@ -65,12 +65,13 @@ nginx-argo-k8s-demo/
 ![kustomization.yaml](images/kustomization.JPG)   
 
 ## 🚀 4. Push Code to GitHub  
-git init  
-git remote add origin https://github.com/ikanko1989/nginx-argo-k8s-demo.git  
-git add .  
-git commit -m "Initial commit: NGINX with Kustomize and argoCD"  
-git push -u origin master  
-
+```bash
+git init
+git remote add origin https://github.com/ikanko1989/nginx-argo-k8s-demo.git
+git add .
+git commit -m "Initial commit: NGINX with Kustomize and argoCD"
+git push -u origin master
+```
 ## ☸️ 5. Use Kubernetes for Argo CD Deployment  
 
 **a. Create Argo CD namespace:**  
