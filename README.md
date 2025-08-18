@@ -85,9 +85,14 @@ Check if everything is running:
 
 student-node ~ ➜  kubectl get pods -o wide  
 NAME                                READY   STATUS    RESTARTS   AGE   IP          NODE              NOMINATED NODE   READINESS GATES  
-nginx-deployment-5f9f5cfd55-llbtp   1/1     Running   0          11m   10.42.1.6   cluster1-node01   <none>           <none>  
+nginx-deployment-5f9f5cfd55-llbtp   1/1     Running   0          11m   10.42.1.6   cluster1-node01   <none>           <none>    
 
+Config map created and mounted in pod(config applied to pod):  
+![cm.yaml](images/cm.png)
 
+student-node ~ ➜  kubectl describe pod nginx-deployment-5f9f5cfd55-llbtp   
+....  
+![cm_pod.yaml](images/cm_pod.png)
 
 Look for nginx-service and its NodePort.  
 
