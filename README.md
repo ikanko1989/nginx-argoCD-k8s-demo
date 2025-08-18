@@ -71,27 +71,7 @@ BJxI5r4EAhazT--l
 
 You can create the Argo CD app using a declarative YAML file or using UI.
 I have used YAML:  
-
-**nginx-app-argocd.yaml**
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: nginx-app
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/ikanko1989/nginx-argo-k8s-demo
-    targetRevision: HEAD
-    path: nginx-argo-k8s-demo/nginx-app
-    kustomize: {}
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: default
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
+![argocd.yaml](images/argocd.yaml.png)
 
 
 **Apply the Argo CD Application:**
@@ -107,29 +87,23 @@ student-node ~ ➜  kubectl get pods -o wide
 NAME                                READY   STATUS    RESTARTS   AGE   IP          NODE              NOMINATED NODE   READINESS GATES  
 nginx-deployment-5f9f5cfd55-llbtp   1/1     Running   0          11m   10.42.1.6   cluster1-node01   <none>           <none>  
 
-kubectl get svc
 
 
-Look for nginx-service and its NodePort.
+Look for nginx-service and its NodePort.  
 
 ## 🌍 9. Access the NGINX App
 
 **Get the NodePort:**
 
-kubectl get svc nginx-service
+student-node ~ ➜  kubectl get svc nginx-service  
+default       service/nginx-service    NodePort       10.43.106.141   <none>    80:32387/TCP   6m23s
 
 
-**Access the app via:**
+**Access the app via curl:**
 
-student-node ~ ➜  curl http://192.168.102.149:32387
-<html>
-  <head><title>Welcome to Argo CD + NGINX</title></head>
-  <body>
-    <h1>Hello from ConfigMap!</h1>
-  </body>
-</html>
+![nodes_curl](images/nodes_curl.png)
 
 
 **Or open in your browser:**
 
-http://<NODE-IP>:<NODEPORT>
+http://192.168.102.149:32387
