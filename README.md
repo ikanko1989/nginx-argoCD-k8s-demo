@@ -56,9 +56,13 @@ nginx-argo-k8s-demo/
 ## 📄 3. Manifest Files
 
 ### `deployment.yaml`
+![deployment.yaml](images/deployment.JPG)  
 ### `service.yaml`
+![service.yaml](images/service.JPG)  
 ### `configmap.yaml`
+![configmap.yaml](images/configmap.JPG)  
 ### `kustomization.yaml`
+![kustomization.yaml](images/kustomization.JPG)   
 
 ## 🚀 4. Push Code to GitHub  
 git init  
